@@ -1,0 +1,3 @@
+An experimental simplified ray-tracer, which will ultimately allow you to input any image and see what it would look like when seen through a slab of glass of the specified thickness. Currently shows what the input image looks like when seen through a certain window into the world, but no glass slab has been implemented yet.
+
+To use, first install numpy, then stick your starter image in the same directory and you can just do: python glasstracer.py -i test_img.jpg -d results_img.jpg (with whatever filenames you like, of course)
