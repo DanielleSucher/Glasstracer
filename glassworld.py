@@ -11,10 +11,12 @@ class Glass(object):
         self.second_z = self.first_z + thickness
         self.first_points = numpy.array(((0, 0, self.first_z),
             (img.width, 0, self.first_z), (0, img.height, self.first_z)))
-        self.first_normal = glassmath.get_normal(self.first_points[0], self.first_points[1], self.first_points[2])
+        # self.first_normal = glassmath.get_unit_normal(self.first_points[0], self.first_points[1], self.first_points[2])
+        self.first_normal = glassmath.get_unit_normal(self.first_points)
         self.second_points = numpy.array(((0, 0, self.second_z),
             (img.width, 0, self.second_z), (0, img.height, self.second_z)))
-        self.second_normal = glassmath.get_normal(self.second_points[0], self.second_points[1], self.second_points[2])
+        # self.second_normal = glassmath.get_unit_normal(self.second_points[0], self.second_points[1], self.second_points[2])
+        self.second_normal = glassmath.get_unit_normal(self.second_points)
 
 
 class Img(object):
@@ -27,6 +29,7 @@ class Img(object):
             (0, self.height, zcoord))
         self.pixels = self.pic.load()
         self.pixlist = list(self.pic.getdata())
+        self.normal = glassmath.get_normal(self.points)
 
 
 class ViewAndCamera(object):
@@ -76,7 +79,7 @@ class World(object):
                 refr_indexes["glass"], refr_indexes["air"])
             # print "line2:", line
             p = glassmath.get_line_intersection_with_plane(line,
-                self.img.points)
+                self.img.points, self.img.normal)
             # print "p:", p
             view_x = ray[1][0] - self.view.x_offset
             view_y = ray[1][1] - self.view.y_offset
