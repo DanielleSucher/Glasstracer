@@ -11,6 +11,6 @@ parser.add_argument('--th', '-t',
 args = parser.parse_args()
 
 
-w = World(args.img)
+w = World(args.img, thickness=int(args.th))
 
 w.render_image(args.img[:-4] + "-refracted" + args.img[-4:])
