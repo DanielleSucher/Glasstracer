@@ -70,10 +70,10 @@ class World(object):
         newdata = dict()
         for ray in self.view.get_initial_rays():
             line = glassmath.refract(ray, self.glass.first_normal, self.glass.first_points,
-                refr_indexes["air"], refr_indexes["glass"])
+                refr_indexes["air"], refr_indexes["diamond"])
             # print "line1:", line
-            # line = glassmath.refract(line, self.glass.second_normal, self.glass.second_points,
-            #     refr_indexes["glass"], refr_indexes["air"])
+            line = glassmath.refract(line, self.glass.second_normal, self.glass.second_points,
+                refr_indexes["diamond"], refr_indexes["air"])
             # print "line2:", line
             p = glassmath.get_line_intersection_with_plane(line,
                 self.img.points)
