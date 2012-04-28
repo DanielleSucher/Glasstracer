@@ -6,9 +6,15 @@ from PIL import Image
 
 class Glass(object):
     """A slab of glass through which to see images"""
-    def __init__(self, view, thickness):
-        self.thickness = thickness
-        self.view = view
+    def __init__(self, img, thickness, zcoord):
+        self.first_z = zcoord / 2
+        self.second_z = self.first_z + thickness
+        self.first_points = numpy.array(((0, 0, self.first_z),
+            (img.width, 0, self.first_z), (0, img.height, self.first_z)))
+        self.first_normal = glassmath.get_normal(self.first_points[0], self.first_points[1], self.first_points[2])
+        self.second_points = numpy.array(((0, 0, self.second_z),
+            (img.width, 0, self.second_z), (0, img.height, self.second_z)))
+        self.second_normal = glassmath.get_normal(self.second_points[0], self.second_points[1], self.second_points[2])
 
 
 class Img(object):
@@ -53,16 +59,25 @@ class ViewAndCamera(object):
 
 
 class World(object):
-    def __init__(self, imgname, zcoord=10, viewdistance=-4, thickness=5):
+    def __init__(self, imgname, zcoord=10, viewdistance=-4, thickness=2):
         self.img = Img(imgname, zcoord)
         self.view = ViewAndCamera(self.img, viewdistance)
-        self.glass = Glass(self.view, thickness)
+        self.glass = Glass(self.img, thickness, zcoord)
 
     def render_image(self, filename):
+        # using the high val for impure flint glass from http://en.wikipedia.org/wiki/List_of_refractive_indices
+        refr_indexes = {"air": 1.000277, "water": 1.3330, "glass": 1.925, "diamond": 2.42}
         newdata = dict()
         for ray in self.view.get_initial_rays():
-            p = glassmath.get_line_intersection_with_plane(ray,
+            line = glassmath.refract(ray, self.glass.first_normal, self.glass.first_points,
+                refr_indexes["air"], refr_indexes["glass"])
+            # print "line1:", line
+            # line = glassmath.refract(line, self.glass.second_normal, self.glass.second_points,
+            #     refr_indexes["glass"], refr_indexes["air"])
+            # print "line2:", line
+            p = glassmath.get_line_intersection_with_plane(line,
                 self.img.points)
+            # print "p:", p
             view_x = ray[1][0] - self.view.x_offset
             view_y = ray[1][1] - self.view.y_offset
             x = p[0]
