@@ -38,7 +38,6 @@ def norm(vec):
 
 
 def refract(ray, normal, points, n1, n2):
-    # ray is a tuple of tuples
     point1 = get_line_intersection_with_plane(ray, (points[0], points[1], points[2]))
     n = n1 / n2
     vector = get_vector_from_ray((ray[1], point1))
