@@ -43,6 +43,6 @@ def refract(ray, normal, points, n1, n2):
     n = n1 / n2
     vector = get_vector_from_ray((ray[1], point1))
     dot = numpy.dot(norm(normal), norm(vector))
-    c = numpy.sqrt(1 - math.pow(n, 2) * (1 - math.pow(dot, 2)))
-    vec = ((n * vector) + numpy.absolute((n * dot - c) * normal))
+    c = numpy.sqrt(numpy.absolute(1 - math.pow(n, 2) * (1 - math.pow(dot, 2))))
+    vec = (n * vector) - (n * dot - c) * normal
     return point1.astype(int), norm(vec).astype(int)

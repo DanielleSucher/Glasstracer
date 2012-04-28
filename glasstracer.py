@@ -13,4 +13,4 @@ args = parser.parse_args()
 
 w = World(args.img)
 
-w.render_image(args.img[:-4] + "-refracted8" + args.img[-4:])
+w.render_image(args.img[:-4] + "-refracted" + args.img[-4:])
